@@ -16,15 +16,15 @@
 static slam_types::FeatureMatch
 RosToFeatureMatch(const CS603_SLAM::FeatureMatch& ros_feature_match) {
   slam_types::FeatureMatch feature_m;
-  feature_m.id_current = ros_feature_match.id_current;
-  feature_m.id_initial = ros_feature_match.id_initial;
+  feature_m.feature_idx_current = ros_feature_match.id_current;
+  feature_m.feature_idx_initial = ros_feature_match.id_initial;
   return feature_m;
 }
 
 static slam_types::VisionFeature
 RosToVisionFeature(const CS603_SLAM::VisionFeature& ros_feature) {
   slam_types::VisionFeature feature;
-  feature.id = ros_feature.id;
+  feature.feature_idx = ros_feature.id;
   feature.pixel[0] = ros_feature.pixel.x;
   feature.pixel[1] = ros_feature.pixel.y;
   feature.pixel[2] = ros_feature.pixel.z;
@@ -54,7 +54,7 @@ RosToRobotPose(const CS603_SLAM::RobotPose& ros_pose) {
 static slam_types::SLAMNode
 RosToSlamNode(const CS603_SLAM::SLAMNode& ros_node) {
   slam_types::SLAMNode node;
-  node.id = ros_node.id;
+  node.node_idx = ros_node.id;
   node.timestamp = ros_node.timestamp;
   node.pose = RosToRobotPose(ros_node.pose);
   for (auto rfeature : ros_node.features) {
@@ -81,8 +81,8 @@ RosToOdometryFactor(const CS603_SLAM::OdometryFactor& ros_odom) {
 static slam_types::VisionFactor
 RosToVisionFactor(const CS603_SLAM::VisionFactor& ros_vfactor) {
   slam_types::VisionFactor vfactor;
-  vfactor.pose_current = ros_vfactor.pose_current;
-  vfactor.pose_initial = ros_vfactor.pose_initial;
+  vfactor.pose_idx_current = ros_vfactor.pose_current;
+  vfactor.pose_idx_initial = ros_vfactor.pose_initial;
   for (auto ros_feature_match : ros_vfactor.feature_matches) {
     vfactor.feature_matches.push_back(RosToFeatureMatch(ros_feature_match));
   }
