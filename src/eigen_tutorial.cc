@@ -71,19 +71,50 @@ void DemoTransforms() {
 }
 
 void DemoHomogeneous() {
+  // .hnormalized()
+  // .homogeneous()
+}
+
+template <typename T>
+void DemoTemplated() {
+  // This is a templated 3D vector.
+  Eigen::Matrix<T, 3, 1> v1(T(1), T(2), T(3));
+
+  // '.cast<T>()' converts types to template T.
+  Vector3f v2(1, 2, 3);
+  Eigen::Matrix<T, 3, 1> v3 = v2.cast<T>();
+  cout << "Cast vector:\n" << v3 << "\n";
+
+  // Templated rotations.
+  T angle1 = T(M_PI / 6.0);
+  Eigen::Matrix<T, 3, 1> axis1(T(1), T(0), T(0));
+  Eigen::AngleAxis<T> r1(angle1, axis1);
+
+  // Templated rotation conversions.
+  Eigen::Quaternion<T> r2 = Eigen::Quaternion<T>(r1);
+  Eigen::AngleAxis<T> r3 = Eigen::AngleAxis<T>(r2);
+  T angle3 = r3.angle();
+  Eigen::Matrix<T, 3, 1> axis3 = r3.axis();
+  cout << "Angle:\n" << angle3 << "\nAxis:\n" << axis3 << "\n";
+
+  // Templated affine Transform.
+  Eigen::Transform<T, 3, Eigen::Affine> a1;
 }
 
 int main() {
-  // Basics: Vectors and Matrices.
+  cout << "Basics: Vectors and Matrices.\n";
   DemoBasics();
 
-  // Different representations of rotation.
+  cout << "\n\n\nDifferent representations of rotation.\n";
   DemoRotations();
 
-  // Coordinate Transforms.
+  cout << "\n\n\nCoordinate Transforms.\n";
   DemoTransforms();
 
-  // Homogeneous coordinates.
+  cout << "\n\n\nHomogeneous coordinates.\n";
   DemoHomogeneous();
+
+  cout << "\n\n\nTemplated Eigen.\n";
+  DemoTemplated<double>();
   return 0;
 }
