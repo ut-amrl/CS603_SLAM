@@ -12,6 +12,7 @@ using std::sin;
 using std::cos;
 
 using Eigen::Affine3f;
+using Eigen::Homogeneous;
 using Eigen::Matrix4f;
 using Eigen::Matrix3f;
 using Eigen::Vector3f;
@@ -125,8 +126,19 @@ void DemoTransforms() {
 }
 
 void DemoHomogeneous() {
-  // .hnormalized()
-  // .homogeneous()
+  cout << "Homogeneous demo" << endl;
+  Vector3f v(1, 1, 0);
+
+  cout << "Get a homogeneous version of a vector" << endl;
+  Homogeneous<Vector3f, 0> h = v.homogeneous();
+
+  cout << "Original vector: " << endl << v << endl;
+  cout << "Homogeneous version: " << endl << h << endl;
+
+  cout << "Convert a homogeneous vector into a normalized regular vector"
+       << endl;
+  Vector3f norm = h.hnormalized();
+  cout << norm << endl;
 }
 
 template <typename T>
