@@ -11,43 +11,51 @@ using std::sqrt;
 using std::sin;
 using std::cos;
 
+using Eigen::Affine3f;
+using Eigen::Matrix4f;
 using Eigen::Matrix3f;
 using Eigen::Vector3f;
 using Eigen::Translation3f;
+using Eigen::Transform;
 using Eigen::Quaternionf;
 using Eigen::AngleAxisf;
 
 void DemoBasics() {
-  cout << "Initialize a vector v1.\n";
+  cout << "Basic initialization" << endl;
+  cout << "Initialize a vector v1." << endl;
   Vector3f v1(1.0, 2.0, 3.0);
 
-  cout << "Read elements of the vector:\n"
-       << "v1.x = " << v1.x() << "\n"
-       << "v1.y = " << v1.y() << "\n"
-       << "v1.z = " << v1.z() << "\n";
+  cout << "Read elements of the vector:" << endl
+       << "v1.x = " << v1.x() << endl
+       << "v1.y = " << v1.y() << endl
+       << "v1.z = " << v1.z() << endl;
 
-  cout << "Write 10 to the x coordinate of v1:\n";
+  cout << "Write 10 to the x coordinate of v1:" << endl;
   v1.x() = 10.0;
-  cout << "v1.x = " << v1.x() << "\n";
+  cout << "v1.x = " << v1.x() << endl;
 
-  cout << "Print the vector to stdout:\n" << v1 << "\n";
+  cout << "Print the vector to stdout:\n" << v1 << endl;
 
-  cout << "Initialize a matrix m1.\n";
+  cout << "Initialize a matrix m1." << endl;
   Matrix3f m1;
   m1  << 2, 0, 0,
          0, 0, 4,
          0, 1, 0;
 
-  cout << "Multiply matrix times vector.\n";
+  cout << "Multiply matrix times vector." << endl;
   Vector3f v2 = m1 * v1;
-  cout << "Resulting vector:\n" << v2 << "\n";
+  cout << "Resulting vector:\n" << v2 << endl;
 }
 
 void DemoRotations() {
+  cout << "Rotations demonstration" << endl;
   float angle1 = M_PI / 4.0;
   Vector3f axis1(1, 0, 0);
+
+  cout << "Create a rotation around an axis" << endl;
   AngleAxisf r1(angle1, axis1);
 
+  cout << "Convert that rotation to a rotation matrix" << endl;
   Matrix3f m1 = r1.toRotationMatrix();
   cout << m1 << "\n";
 
@@ -63,11 +71,57 @@ void DemoRotations() {
   AngleAxisf r2 = AngleAxisf(m3);
   float angle2 = r2.angle();
   Vector3f axis2 = r2.axis();
-  cout << "Angle:\n" << angle2 << "\nAxis:\n" << axis2 << "\n";
+  cout << "Angle:\n" << angle2 << "\nAxis:\n" << axis2 << endl;
 }
 
 void DemoTransforms() {
+  cout << "Transformations demonstration" << endl;
 
+  cout << "Create a point (A vector representing displacement from the origin)"
+       << endl;
+
+  Vector3f p(0, 1, 0);
+
+  cout << "Create a translation" << endl;
+  Translation3f translation(0, 1, 0);
+
+  cout << "Create a translation from a vector" << endl;
+  Vector3f t(0, 1, 0);
+  Translation3f translation2(t);
+
+  cout << "Apply the translation" << endl;
+  Vector3f p2 = translation * p;
+
+  cout << p2 << endl;
+
+  cout << "Apply an Angle Axis Rotation" << endl;
+
+  float angle1 = M_PI / 4.0;
+  Vector3f axis1(1, 0, 0);
+
+  AngleAxisf aa(angle1, axis1);
+  Vector3f p3 = aa * p;
+
+  cout << p3 << endl;
+
+  cout << "Create a generic affine transform" << endl;
+  Affine3f transform = translation * aa;
+
+  cout << "Apply a transform to a vector" << endl;
+  Vector3f p4 = transform * p;
+  cout << p4 << endl;
+
+  cout << "Convert to a matrix" << endl;
+  Matrix4f m1 = transform.matrix();
+  cout << m1 << endl;
+
+  cout << "Extract just the translation" << endl;
+  Vector3f v = transform.translation();
+  cout << v << endl;
+
+  cout << "Extract just the rotation" << endl;
+  Matrix3f m2 = transform.rotation();
+  cout << m2 << endl;
 }
 
 void DemoHomogeneous() {
