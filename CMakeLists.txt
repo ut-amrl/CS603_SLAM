@@ -46,3 +46,5 @@ ROSBUILD_ADD_EXECUTABLE(slam-backend
                         src/slam_backend_main.cc)
 TARGET_LINK_LIBRARIES(slam-backend shared_library ${libs})
 
+ADD_EXECUTABLE(eigen-tutorial
+               src/eigen_tutorial.cc)
