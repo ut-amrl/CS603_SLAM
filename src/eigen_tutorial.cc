@@ -71,6 +71,8 @@ void DemoTransforms() {
 }
 
 void DemoHomogeneous() {
+  // .hnormalized()
+  // .homogeneous()
 }
 
 template <typename T>
