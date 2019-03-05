@@ -11,7 +11,7 @@
 #include "CS603_SLAM/VisionFactor.h"
 #include "CS603_SLAM/VisionFeature.h"
 #include "slam_types.h"
-#include "slam-backend-solver.h"
+#include "slam_backend_solver.h"
 
 static slam_types::FeatureMatch
 RosToFeatureMatch(const CS603_SLAM::FeatureMatch& ros_feature_match) {

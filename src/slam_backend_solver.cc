@@ -11,7 +11,7 @@
 #include "visualization_msgs/Marker.h"
 #include "slam_types.h"
 
-#include "slam-backend-solver.h"
+#include "slam_backend_solver.h"
 
 using Eigen::Affine3f;
 using Eigen::Translation3f;
@@ -62,65 +62,8 @@ PoseArrayToAffine(const T* rotation, const T* translation) {
   return transform;
 }
 
-// The function for computing a vision residual for a single vision feature
-// match between two robot poses.
-struct VisionResidual {
-  // Compute the
-  template <typename T>
-  bool operator() (const T* pose_initial, // 6D pose of the initial node.
-                   const T* pose_current, // 6D pose of the current node.
-                   const T* inv_depth,  // Inverse depth of the point in
-                                        // initial node's camera coordinates.
-                   T* residual) const {
-    // TODO: Compute the vision residual based on Lecture 10.
-
-    // Compute the residual.
-    // residual[0] = ???;
-    // residual[1] = ???;
-
-    return true;
-  }
-
-  // TODO: You will have to expand this constructor to take in any additional
-  // constant data that is required to compute this residual.
-  // HINT: observed pixel locations?
-  VisionResidual(
-      const CameraIntrinsics& intrinsics,
-      const CameraExtrinsics& extrinsics) :
-      intrinsics(intrinsics),
-      extrinsics(extrinsics) {}
-
-  const CameraIntrinsics& intrinsics;
-  const CameraExtrinsics& extrinsics;
-};
-
-struct OdometryResidual {
-  template <typename T>
-  bool operator() (const T* pose_i,  // 6D pose of node i.
-                   const T* pose_ip1,  // 6D pose of node i+1.
-                   T* residual) const {
-    // Compute the residual.
-    // Translation error
-    // residual[0] = ???;
-    // residual[1] = ???;
-    // residual[2] = ???;
-    // Rotation error
-    // residual[3] = ???;
-    // residual[4] = ???;
-    // residual[5] = ???;
-    return true;
-  }
-
-  // You should not have to expand this constructor to take in any additional
-  // constant data: all that is required is the observed odometry.
-  OdometryResidual(const Affine3f& odometry_tf) : odometry_tf(odometry_tf) {}
-
-  // Affine transform for odometry from pose i to i + 1.
-  const Affine3f& odometry_tf;
-};
-
 // Callback to ceres solver to visualize the solution between steps of the
-// optimization.
+// optimization. You do not need to modify this.
 class VisualizationCallback : public ceres::IterationCallback {
 public:
   explicit VisualizationCallback(const CameraIntrinsics& intrinsics,
@@ -212,11 +155,70 @@ private:
   const SLAMProblem& problem;
 };
 
+// The function for computing a vision residual for a single vision feature
+// match between two robot poses.
+struct VisionResidual {
+  // Compute the
+  template <typename T>
+  bool operator() (const T* pose_initial, // 6D pose of the initial node.
+                   const T* pose_current, // 6D pose of the current node.
+                   const T* inv_depth,  // Inverse depth of the point in
+                   // initial node's camera coordinates.
+                   T* residual) const {
+    // TODO: Compute the vision residual based on Lecture 10.
+
+    // Compute the residual.
+    // residual[0] = ???;
+    // residual[1] = ???;
+
+    return true;
+  }
+
+  // TODO: You will have to expand this constructor to take in any additional
+  // constant data that is required to compute this residual.
+  // HINT: observed pixel locations?
+  VisionResidual(
+    const CameraIntrinsics& intrinsics,
+    const CameraExtrinsics& extrinsics) :
+    intrinsics(intrinsics),
+    extrinsics(extrinsics) {}
+
+    const CameraIntrinsics& intrinsics;
+    const CameraExtrinsics& extrinsics;
+};
+
+struct OdometryResidual {
+  template <typename T>
+  bool operator() (const T* pose_i,  // 6D pose of node i.
+                   const T* pose_ip1,  // 6D pose of node i+1.
+                   T* residual) const {
+    // Compute the residual.
+    // Translation error
+    // residual[0] = ???;
+    // residual[1] = ???;
+    // residual[2] = ???;
+    // Rotation error
+    // residual[3] = ???;
+    // residual[4] = ???;
+    // residual[5] = ???;
+    return true;
+  }
+
+  // You should not have to expand this constructor to take in any additional
+  // constant data: all that is required is the observed odometry.
+  OdometryResidual(const Affine3f& odometry_tf) :
+  odometry_tf(odometry_tf) {}
+
+  // Affine transform for odometry from pose i to i + 1.
+  const Affine3f& odometry_tf;
+};
+
 void GetMap(const CameraIntrinsics& intrinsics,
             const CameraExtrinsics& extrinsics,
             const SLAMProblem& problem,
             const vector<SLAMNodeSolution>& solution,
             vector<Vector3f>* map_ptr) {
+  // TODO: Implement this function by populating the map_ptr vector
 }
 
 bool SolveSLAM(const CameraIntrinsics& intrinsics,
@@ -242,6 +244,7 @@ bool SolveSLAM(const CameraIntrinsics& intrinsics,
     solution.push_back(SLAMNodeSolution(slam_problem.nodes[i]));
   }
 
+  // Calculate the total number of feature matches
   int num_feature_matches = 0;
   for (const VisionFactor& f : slam_problem.vision_factors) {
     num_feature_matches += f.feature_matches.size();
@@ -258,6 +261,7 @@ bool SolveSLAM(const CameraIntrinsics& intrinsics,
       &solution);
   options.callbacks.push_back(&visualization_callback);
 
+  // Publish visualization of the initial guess of the solution
   for (int i = 0; i < 100; ++i) {
     visualization_callback(ceres::IterationSummary());
     ros::Duration(0.01).sleep();

@@ -16,7 +16,7 @@
 
 #include "slam_types.h"
 #include "ros_to_slam.h"
-#include "slam-backend-solver.h"
+#include "slam_backend_solver.h"
 
 using Eigen::AngleAxisf;
 using Eigen::Matrix3f;

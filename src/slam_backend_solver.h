@@ -35,12 +35,15 @@ struct CameraExtrinsics {
   float rotation[3];
 };
 
+// Extract a map from a SLAM Solution. You will need to implement
 void GetMap(const CameraIntrinsics& intrinsics,
             const CameraExtrinsics& extrinsics,
             const slam_types::SLAMProblem& problem,
             const std::vector<slam_types::SLAMNodeSolution>& solution,
             std::vector<Eigen::Vector3f>* map);
 
+// Convert the input SLAM problem struct into a Ceres problem and store
+// the solutions in the solved_nodes vector
 bool SolveSLAM(const CameraIntrinsics& intrinsics,
                const CameraExtrinsics& extrinsics,
                const slam_types::SLAMProblem& slam_problem,

@@ -42,7 +42,7 @@ ADD_LIBRARY(shared_library
             src/timer.cc)
 
 ROSBUILD_ADD_EXECUTABLE(slam-backend
-                        src/slam-backend-solver.cc
-                        src/slam-backend-main.cc)
+                        src/slam_backend_solver.cc
+                        src/slam_backend_main.cc)
 TARGET_LINK_LIBRARIES(slam-backend shared_library ${libs})
 
