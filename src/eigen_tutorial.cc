@@ -5,6 +5,8 @@
 #include "eigen3/Eigen/Dense"
 #include "eigen3/Eigen/Geometry"
 
+#include "rotation.h"
+
 using std::cout;
 using std::endl;
 using std::sqrt;
@@ -165,6 +167,14 @@ void DemoTemplated() {
 
   // Templated affine Transform.
   Eigen::Transform<T, 3, Eigen::Affine> a1;
+
+  // Construct a rotation matrix.
+  Eigen::Matrix<T, 3, 3> r4;
+  r4 << T(cos(M_PI / 3.0)), T(-sin(M_PI / 3.0)), 0,
+        T(sin(M_PI / 3.0)), T(cos(M_PI / 3.0)), 0,
+        0, 0, 1;
+  Eigen::AngleAxis<T> r5 = RotationMatrixToAngleAxis(r4);
+  cout << "Angle:\n" << r5.angle() << "\nAxis:\n" << r5.axis() << "\n";
 }
 
 int main() {
