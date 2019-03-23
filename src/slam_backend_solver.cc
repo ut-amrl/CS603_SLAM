@@ -12,6 +12,7 @@
 #include "slam_types.h"
 
 #include "slam_backend_solver.h"
+#include "rotation.h"
 
 using Eigen::Affine3f;
 using Eigen::Translation3f;
